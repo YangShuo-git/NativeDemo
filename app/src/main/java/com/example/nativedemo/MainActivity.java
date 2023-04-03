@@ -26,8 +26,16 @@ public class MainActivity extends AppCompatActivity {
         // Example of a call to a native method
         TextView tv = binding.sampleText;
         tv.setText(stringFromJNI());
+
+        TextView tv2 = binding.sampleText2;
+        tv2.setText(stringGetJNI());
+
+        TextView tv3 = binding.sampleText3;
+        tv3.setText(stringSetJNI("hello native"));
     }
 
-    // 2. native关键字，说明要调用jni的接口
+    // 2. java层定义接口  native关键字，说明是要调用jni的接口
     public native String stringFromJNI();
+    public native String stringGetJNI();
+    public native String stringSetJNI(String name);  // 用javah工具自动生成对应的Native代码函数
 }
