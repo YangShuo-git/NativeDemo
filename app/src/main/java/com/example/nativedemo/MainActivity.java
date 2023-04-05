@@ -32,10 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tv3 = binding.sampleText3;
         tv3.setText(stringSetJNI("hello native"));
+
+        TextView tv4 = binding.sampleText4;
+        tv3.setText(staticStringFromJNI());
     }
 
     // 2. java层定义接口  native关键字，说明是要调用jni的接口
     public native String stringFromJNI();
     public native String stringGetJNI();
-    public native String stringSetJNI(String name);  // 用javah工具自动生成对应的Native代码函数
+    public native String stringSetJNI(String name);  // 自动生成对应的Native代码函数
+    static public native String staticStringFromJNI();
 }

@@ -37,3 +37,10 @@ Java_com_example_nativedemo_MainActivity_stringSetJNI(JNIEnv *env, jobject, jstr
     env->ReleaseStringChars(name, reinterpret_cast<const jchar*>(str));
     return env->NewStringUTF(res.c_str());
 }
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_example_nativedemo_MainActivity_staticStringFromJNI(JNIEnv *env, jclass clazz) {
+    std::string hello = "Hello static function";
+
+    return env->NewStringUTF(hello.c_str());
+}
