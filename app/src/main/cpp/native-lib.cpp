@@ -2,6 +2,11 @@
 #include <string>
 #include "test.h"
 
+#include <android/log.h>
+#define TAG "baiyang"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, TAG, __VA_ARGS__);
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, TAG, __VA_ARGS__);
+#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, TAG, __VA_ARGS__);
 
 // 3. C++层实现接口
 extern "C"  // 使用C的方式来编译代码
@@ -67,9 +72,8 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_example_nativedemo_MainActivity_changeAge(JNIEnv *env, jclass clazz) {
     jfieldID ageFid = env->GetStaticFieldID(clazz, "age", "I");
-
-
     int age = env->GetStaticIntField(clazz, ageFid);  // 获取之前的age
+    LOGI("之前的age：%d\n", age);
 
     // int就是jint，所以可以直接用；但是String，必须需要jstring
     env->SetStaticIntField(clazz, ageFid, age + 1);
