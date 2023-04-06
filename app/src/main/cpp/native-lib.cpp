@@ -52,6 +52,7 @@ JNIEXPORT jstring JNICALL
 Java_com_example_nativedemo_MainActivity_staticStringFromJNI(JNIEnv *env, jclass clazz) {
     std::string hello = "Hello static function";
 
+    // 从string到jstring
     return env->NewStringUTF(hello.c_str());
 }
 
@@ -63,8 +64,10 @@ Java_com_example_nativedemo_MainActivity_changeName(JNIEnv *env, jobject thiz) {
 
     jfieldID nameFid = env->GetFieldID(mainActivityClass, "name", "Ljava/lang/String;");
 
-    // 引用类型需要JNI这个中转站  char *->jstring->String
-    jstring newName = env->NewStringUTF("Beyond");
+    // 引用类型需要JNI这个中转站
+    const char* value= "Beyond";
+    jstring newName = env->NewStringUTF(value);  // 从char *到jstring
+
     env->SetObjectField(thiz, nameFid, newName);
 }
 
@@ -72,9 +75,35 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_example_nativedemo_MainActivity_changeAge(JNIEnv *env, jclass clazz) {
     jfieldID ageFid = env->GetStaticFieldID(clazz, "age", "I");
-    int age = env->GetStaticIntField(clazz, ageFid);  // 获取之前的age
+    int age = env->GetStaticIntField(clazz, ageFid);  // C++层获取之前的age
     LOGI("之前的age：%d\n", age);
 
     // int就是jint，所以可以直接用；但是String，必须需要jstring
     env->SetStaticIntField(clazz, ageFid, age + 1);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_nativedemo_MainActivity_callAddMethod(JNIEnv *env, jobject thiz) {
+    jclass mainActivityClass = env->GetObjectClass(thiz);
+    jmethodID addMid = env->GetMethodID(mainActivityClass, "add", "(II)I");
+
+    int res = env->CallIntMethod(thiz, addMid, 1, 1);
+    LOGI("两数之和：%d\n", res);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_nativedemo_MainActivity_callShowStringMethod(JNIEnv *env, jobject thiz) {
+     jclass mainActivityClass = env->GetObjectClass(thiz);
+     jmethodID showStringMid = env->GetMethodID(mainActivityClass, "showString", "(Ljava/lang/String;)Ljava/lang/String;");
+
+     // 从char*到jstring
+     const char* value= "C++ call java method!";
+     jstring tmpJstr1 = env->NewStringUTF(value);
+
+    // 从jstring到char*
+     jstring tmpJstr2 = (jstring)env->CallObjectMethod(thiz, showStringMid, tmpJstr1);
+     const char* res = env->GetStringUTFChars(tmpJstr2, NULL);
+     LOGI("字符串：%s\n", res);
 }

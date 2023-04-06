@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ActivityMainBinding binding;
-    private String name = "baiyang";  // 使用C++代码来修改名字和年龄，需要参数类型的签名
+    private String name = "baiyang";  // 被C++调用的参数：名字和年龄（需要签名）
     public static int age = 28;
 
     // 2. java层定义接口  native关键字，说明是要调用jni的接口
@@ -25,6 +25,18 @@ public class MainActivity extends AppCompatActivity {
     static public native String staticStringFromJNI();
     public native void changeName();
     public static native void changeAge();
+    public native void callAddMethod();
+    public native void callShowStringMethod();
+
+    // 被C++调用的函数（需要签名，解决函数重载的问题） (II)I
+    public int add(int num1, int num2){
+        return num1 + num2;
+    }
+
+    // (Ljava/lang/String)Ljava/lang/String
+    public String showString(String str){
+        return "【" + str + "】";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,5 +62,8 @@ public class MainActivity extends AppCompatActivity {
         changeName();
         changeAge();
         System.out.println("修改之后：name: " + name + ", age: " + age);
+
+        callAddMethod();
+        callShowStringMethod();
     }
 }
