@@ -56,6 +56,8 @@ Java_com_example_nativedemo_MainActivity_staticStringFromJNI(JNIEnv *env, jclass
     return env->NewStringUTF(hello.c_str());
 }
 
+
+// C++调用java的数据与方法，数据签名
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_example_nativedemo_MainActivity_changeName(JNIEnv *env, jobject thiz) {
@@ -64,9 +66,9 @@ Java_com_example_nativedemo_MainActivity_changeName(JNIEnv *env, jobject thiz) {
 
     jfieldID nameFid = env->GetFieldID(mainActivityClass, "name", "Ljava/lang/String;");
 
-    // 引用类型需要JNI这个中转站
+    // 从char*到jstring    引用类型需要JNI这个中转站
     const char* value= "Beyond";
-    jstring newName = env->NewStringUTF(value);  // 从char *到jstring
+    jstring newName = env->NewStringUTF(value);
 
     env->SetObjectField(thiz, nameFid, newName);
 }
@@ -76,7 +78,6 @@ JNIEXPORT void JNICALL
 Java_com_example_nativedemo_MainActivity_changeAge(JNIEnv *env, jclass clazz) {
     jfieldID ageFid = env->GetStaticFieldID(clazz, "age", "I");
     int age = env->GetStaticIntField(clazz, ageFid);  // C++层获取之前的age
-    LOGI("之前的age：%d\n", age);
 
     // int就是jint，所以可以直接用；但是String，必须需要jstring
     env->SetStaticIntField(clazz, ageFid, age + 1);

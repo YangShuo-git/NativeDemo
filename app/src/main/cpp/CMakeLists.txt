@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 3.22.1)
 
 project("nativedemo")
 
-# 设置动态库文件的生成目录
+# 指定动态库的生成目录
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../jnilibs/${ANDROID_ABI})
 
 # Creates and names a library, sets it as either STATIC

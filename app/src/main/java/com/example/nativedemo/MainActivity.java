@@ -2,12 +2,20 @@ package com.example.nativedemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.nativedemo.databinding.ActivityMainBinding;
 
+import android.opengl.GLSurfaceView;
+import android.os.Bundle;
+
 public class MainActivity extends AppCompatActivity {
+
+    private String TAG = MainActivity.class.getSimpleName();
+    private GLSurfaceView glSurfaceView;
+
 
     // 1. 加载so库.
     static {
@@ -28,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     public native void callAddMethod();
     public native void callShowStringMethod();
 
+//    public native void test();
+
     // 被C++调用的函数（需要签名，解决函数重载的问题） (II)I
     public int add(int num1, int num2){
         return num1 + num2;
@@ -44,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        initView();
 
         // Example of a call to a native method
         TextView tv = binding.sampleText;
@@ -66,4 +78,28 @@ public class MainActivity extends AppCompatActivity {
         callAddMethod();
         callShowStringMethod();
     }
+
+    private void initView() {
+        // 将glSurfaceView与ui的绑定
+        glSurfaceView = (GLSurfaceView)findViewById(R.id.glsurfaceview);
+
+        // 设置GLContext的版本
+        glSurfaceView.setEGLContextClientVersion(2);
+        // 设置Render
+        glSurfaceView.setRenderer(new BackgroundRender());
+        // 设置渲染方式，RENDERMODE_WHEN_DIRTY表示被动渲染，只有在调用requestRender或者onResume等方法时才会进行渲染;RENDERMODE_CONTINUOUSLY表示持续渲染
+        glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+    }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        glSurfaceView.onResume();
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        glSurfaceView.onPause();
+//    }
 }
