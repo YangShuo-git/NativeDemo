@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         // 设置GLContext的版本
         glSurfaceView.setEGLContextClientVersion(2);
         // 设置Render
-        glSurfaceView.setRenderer(new BackgroundRender());
+        glSurfaceView.setRenderer(new TriangleRender());
         // 设置渲染方式，RENDERMODE_WHEN_DIRTY表示被动渲染，只有在调用requestRender或者onResume等方法时才会进行渲染;RENDERMODE_CONTINUOUSLY表示持续渲染
         glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
