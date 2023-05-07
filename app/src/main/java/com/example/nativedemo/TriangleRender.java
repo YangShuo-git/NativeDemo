@@ -28,7 +28,7 @@ public class TriangleRender implements GLSurfaceView.Renderer {
                     "  gl_FragColor = vColor;" +
                     "}";
 
-    // 顶点形状
+    // 设置顶点形状
     static float triangleCoords[] = {
             0.5f,  0.5f, 0.0f,  // top
             -0.5f, -0.5f, 0.0f, // bottom left
@@ -54,30 +54,30 @@ public class TriangleRender implements GLSurfaceView.Renderer {
 
         // CPU--->GPU  是通过ByteBuffer 实现数据从cpu到gpu的转换
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(triangleCoords.length * 4);
-        // GPU重新整理内存
-        byteBuf.order(ByteOrder.nativeOrder());
+        byteBuf.order(ByteOrder.nativeOrder());  // GPU重新整理内存
 
-        // 在GPU中，需要将ByteBuffer转换为FloatBuffer，用以传入OpenGL ES程序
+        // 在GPU中，还需要将ByteBuffer转换为FloatBuffer，用以传入OpenGL ES程序
         vertexBuffer = byteBuf.asFloatBuffer();
         vertexBuffer.put(triangleCoords);
         vertexBuffer.position(0);
 
-        // 1.创建一个顶点程序  2.将顶点程序从CPU传入GPU  3.编译顶点程序
+        // 1.创建一个顶点着色器  2.将写好的顶点着色器从CPU传入GPU  3.编译顶点着色器
         int vertexShader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
         GLES20.glShaderSource(vertexShader, vertexShaderCode);
         GLES20.glCompileShader(vertexShader);
 
-        // 1.创建一个片元程序  2.将片元程序从CPU传入GPU  3.编译片元程序
+        // 1.创建一个片元着色器  2.将写好的片元着色器从CPU传入GPU  3.编译片元着色器
         int fragmentShader = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
         GLES20.glShaderSource(fragmentShader, fragmentShaderCode);
         GLES20.glCompileShader(fragmentShader);
 
-        // 顶点程序、片元程序，本质上都是一个在GPU中运行的可执行程序
+        // 创建一个渲染程序  顶点程序、片元程序，本质上都是一个在GPU中运行的可执行程序
         mProgram = GLES20.glCreateProgram();
+        // 将着色器添加到渲染程序中
         GLES20.glAttachShader(mProgram, vertexShader);
         GLES20.glAttachShader(mProgram, fragmentShader);
 
-        // 链接顶点、片元程序，并且生成一个可执行的程序
+        // 链接顶点、片元着色器，并且生成一个可执行的程序
         GLES20.glLinkProgram(mProgram);
 
 //        int vertexShader =  loadShader(GLES20.GL_VERTEX_SHADER,vertexShaderCode);
@@ -105,7 +105,7 @@ public class TriangleRender implements GLSurfaceView.Renderer {
         // 将程序加入到OpenGLES2.0环境
         GLES20.glUseProgram(mProgram);
 
-        // 获取顶点着色器的vPosition成员句柄
+        // 获取顶点着色器的vPosition句柄
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
         // 启用三角形顶点的句柄  vPosition 能够允许 cpu 往 gpu写
         GLES20.glEnableVertexAttribArray(mPositionHandle);
@@ -114,12 +114,13 @@ public class TriangleRender implements GLSurfaceView.Renderer {
                 GLES20.GL_FLOAT, false,
                 12, vertexBuffer);
 
-        // 获取片元着色器的vColor成员的句柄
+        // 获取片元着色器的vColor句柄
         mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
         // 设置绘制三角形的颜色
         GLES20.glUniform4fv(mColorHandle, 1, color, 0);
         // 绘制三角形
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 3);
+
         // 禁止顶点数组的句柄
         GLES20.glDisableVertexAttribArray(mPositionHandle);
     }
