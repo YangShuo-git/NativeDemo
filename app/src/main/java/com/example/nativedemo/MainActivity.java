@@ -8,8 +8,9 @@ import android.widget.TextView;
 
 import com.example.nativedemo.databinding.ActivityMainBinding;
 
-import android.opengl.GLSurfaceView;
-import android.os.Bundle;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        checkPermission();
 
         initView();
 
@@ -77,6 +79,19 @@ public class MainActivity extends AppCompatActivity {
 
         callAddMethod();
         callShowStringMethod();
+    }
+
+    public boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+            }, 1);
+
+        }
+        return false;
     }
 
     private void initView() {
