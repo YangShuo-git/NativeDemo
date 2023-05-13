@@ -13,17 +13,18 @@ public class CameraView extends GLSurfaceView {
 
     public CameraView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        // 1.配置EGL的版本（必须设置）
         setEGLContextClientVersion(2);
-
+        // 2.设置渲染器
         renderer = new CameraRender(this);
-
         setRenderer(renderer);
         /**
          *  刷新方式：
-         *  RENDERMODE_WHEN_DIRTY   手动刷新，调用requestRender(); 效率高一点
-         *  RENDERMODE_CONTINUOUSLY 自动刷新，大概16ms自动回调一次onDrawFrame()
+         *  RENDERMODE_WHEN_DIRTY   手动刷新（按需），调用requestRender(); 效率高一点
+         *  RENDERMODE_CONTINUOUSLY 自动刷新（连续），大概16ms自动回调一次onDrawFrame()
          */
-        // 必须在setRenderer() 后面
+        // 3.设置渲染模式
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 }

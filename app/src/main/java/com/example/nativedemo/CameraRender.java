@@ -25,29 +25,35 @@ public class CameraRender implements GLSurfaceView.Renderer, Preview.OnPreviewOu
         cameraHelper = new CameraHelper(lifecycleOwner, this);
     }
 
+    // 监听画布创建完成
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+
+        // 准备好摄像头绘制的画布; 通过gl创建一个纹理id
         textures = new int[1];
         // 让 SurfaceTexture 与 Gpu（OpenGL）共享一个数据源  0-31
         mCameraTexure.attachToGLContext(textures[0]);
-
         // 监听摄像头数据回调
         mCameraTexure.setOnFrameAvailableListener(this);
+
+        // 必须要在glThread中进行初始化
         screenFilter = new ScreenFilter(cameraView.getContext());
     }
 
+    // 监听画布改变
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         screenFilter.setSize(width,height);
     }
+
+    // 渲染画画
     @Override
     public void onDrawFrame(GL10 gl) {
         // 重新渲染 会调用该接口
         Log.i(TAG, "线程: " + Thread.currentThread().getName());
-        // 摄像头的数据  ---》
-        // 更新摄像头的数据  给了  gpu
+        // 把摄像头的数据先输出来  更新纹理
         mCameraTexure.updateTexImage();
-        // 不是数据
+        // 获得变换矩阵
         mCameraTexure.getTransformMatrix(mtx);
         screenFilter.setTransformMatrix(mtx);
         //int   数据   byte[]
@@ -60,10 +66,10 @@ public class CameraRender implements GLSurfaceView.Renderer, Preview.OnPreviewOu
         mCameraTexure = output.getSurfaceTexture();
     }
 
+    // 监听到有一个可用帧时
     @Override
     public void onFrameAvailable(SurfaceTexture surfaceTexture) {
-        // 当有数据过来的时候 进行手动刷新 即调用requestRender()
-        // 一帧 一帧回调
+        // 当有数据过来的时候 进行手动刷新 即当有一个可用帧时，就调用requestRender()
         cameraView.requestRender();
     }
 }

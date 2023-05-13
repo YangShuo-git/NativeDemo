@@ -8,6 +8,7 @@ import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
 import androidx.lifecycle.LifecycleOwner;
 
+// 该类封装了对Camera的一系列操作
 public class CameraHelper {
     private HandlerThread handlerThread;
     private CameraX.LensFacing currentFacing = CameraX.LensFacing.BACK;
