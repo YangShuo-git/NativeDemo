@@ -21,8 +21,8 @@ public class ScreenFilter {
     private int mWidth;
     private int mHeight;
     private float[] mtx;
-    //gpu顶点缓冲区
-    FloatBuffer vertexBuffer; //顶点坐标缓存区
+    // gpu顶点缓冲区
+    FloatBuffer vertexBuffer; // 顶点坐标缓存区
     float[] VERTEX = {
             -1.0f, -1.0f,
             1.0f, -1.0f,
@@ -36,7 +36,7 @@ public class ScreenFilter {
             1.0f, 1.0f
     };
     public ScreenFilter(Context context) {
-        vertexBuffer =  ByteBuffer.allocateDirect(4 * 4 * 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        vertexBuffer = ByteBuffer.allocateDirect(4 * 4 * 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
         vertexBuffer.clear();
         vertexBuffer.put(VERTEX);
 
@@ -46,12 +46,12 @@ public class ScreenFilter {
         textureBuffer.put(TEXTURE);
 
         String vertexSharder = OpenGLUtils.readRawTextFile(context, R.raw.camera_vert);
-        //  先编译    再链接   再运行  程序
         String fragSharder = OpenGLUtils.readRawTextFile(context, R.raw.camera_frag);
+        //  先编译    再链接   再运行  程序
         // cpu 1   没有用  索引     program gpu
         program = OpenGLUtils.loadProgram(vertexSharder, fragSharder);
 
-        vPosition = GLES20.glGetAttribLocation(program, "vPosition");//0
+        vPosition = GLES20.glGetAttribLocation(program, "vPosition");
         // 接收纹理坐标，接收采样器采样图片的坐标
         vCoord = GLES20.glGetAttribLocation(program, "vCoord");//1
         // 采样点的坐标
