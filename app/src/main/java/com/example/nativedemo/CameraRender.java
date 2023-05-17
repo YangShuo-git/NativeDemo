@@ -51,12 +51,12 @@ public class CameraRender implements GLSurfaceView.Renderer, Preview.OnPreviewOu
     public void onDrawFrame(GL10 gl) {
         // 重新渲染 会调用该接口
         Log.i(TAG, "线程: " + Thread.currentThread().getName());
-        // 把摄像头的数据先输出来  更新纹理
+        // 把摄像头的数据先输出来  更新纹理  SufaceTexture  给了GPU
         mCameraTexure.updateTexImage();
         // 获得变换矩阵
         mCameraTexure.getTransformMatrix(mtx);
         screenFilter.setTransformMatrix(mtx);
-        //int   数据   byte[]
+
         screenFilter.onDraw(textures[0]);
     }
 

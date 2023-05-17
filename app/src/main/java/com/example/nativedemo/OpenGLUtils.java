@@ -90,18 +90,17 @@ public class OpenGLUtils {
         return sb.toString();
     }
 
-
     public static int loadProgram(String vSource, String fSource) {
         /**
          * 顶点着色器
          */
         int vShader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
-        //加载着色器代码
+        // 加载着色器代码
         GLES20.glShaderSource(vShader, vSource);
-        //编译（配置）
+        // 编译
         GLES20.glCompileShader(vShader);
 
-        //查看配置 是否成功
+        // 查看编译是否成功
         int[] status = new int[1];
         GLES20.glGetShaderiv(vShader, GLES20.GL_COMPILE_STATUS, status, 0);
         if (status[0] != GLES20.GL_TRUE) {
@@ -112,20 +111,19 @@ public class OpenGLUtils {
 
         /**
          *  片元着色器
-         *  流程和上面一样
          */
         int fShader = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
-        //加载着色器代码
+        // 加载着色器代码
         GLES20.glShaderSource(fShader, fSource);
-        //编译（配置）
+        // 编译
         GLES20.glCompileShader(fShader);
 
-        //查看配置 是否成功
+        // 查看编译是否成功
         GLES20.glGetShaderiv(fShader, GLES20.GL_COMPILE_STATUS, status, 0);
         if (status[0] != GLES20.GL_TRUE) {
             //失败
             throw new IllegalStateException("load fragment shader:" + GLES20.glGetShaderInfoLog
-                    (vShader));
+                    (fShader));
         }
 
 

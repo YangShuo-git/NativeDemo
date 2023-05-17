@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+    <com.example.nativedemo.CameraView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    
     <android.opengl.GLSurfaceView
         android:id="@+id/glsurfaceview"
         android:layout_width="match_parent"
