@@ -1,15 +1,14 @@
 package com.example.nativedemo;
 
+import static android.opengl.GLES20.GL_FLOAT;
+import static android.opengl.GLES20.GL_TEXTURE0;
+
 import android.content.Context;
 import android.opengl.GLES20;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-
-import static android.opengl.GLES20.GL_FALSE;
-import static android.opengl.GLES20.GL_FLOAT;
-import static android.opengl.GLES20.GL_TEXTURE0;
 
 public class ScreenFilter {
     private int program;
@@ -23,12 +22,14 @@ public class ScreenFilter {
     // gpu顶点缓冲区
     FloatBuffer vertexBuffer; // 顶点坐标缓存区
     FloatBuffer textureBuffer;  // 纹理坐标缓冲区
+    // 世界坐标系
     float[] VERTEX = {
             -1.0f, -1.0f,
             1.0f, -1.0f,
             -1.0f, 1.0f,
             1.0f, 1.0f
     };
+    // 纹理坐标系
     float[] TEXTURE = {
             0.0f, 0.0f,
             1.0f, 0.0f,
@@ -36,7 +37,7 @@ public class ScreenFilter {
             1.0f, 1.0f
     };
     public ScreenFilter(Context context) {
-        // 1.处理缓冲区 vertexBuffer
+        // 1.处理缓冲区 vertexBuffer和textureBuffer
         vertexBuffer = ByteBuffer.allocateDirect(4 * 4 * 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
         vertexBuffer.clear();
         vertexBuffer.put(VERTEX);
@@ -46,12 +47,12 @@ public class ScreenFilter {
         textureBuffer.clear();
         textureBuffer.put(TEXTURE);
 
-        //  1.处理shader、program
+        //  2.处理shader、program
         String vertexSharder = OpenGLUtils.readRawTextFile(context, R.raw.camera_vert);  // 读取vertexshader为字符串
         String fragSharder = OpenGLUtils.readRawTextFile(context, R.raw.camera_frag);  // 读取fragmentshader为字符串
         program = OpenGLUtils.loadProgram(vertexSharder, fragSharder);
 
-        // 2.处理各种坐标
+        // 3.处理各种坐标
         // 接收顶点坐标
         vPosition = GLES20.glGetAttribLocation(program, "vPosition");
         // 接收纹理坐标，接收采样器采样图片的坐标
@@ -60,7 +61,6 @@ public class ScreenFilter {
         vTexture = GLES20.glGetUniformLocation(program, "vTexture");
         // 变换矩阵， 需要将原本的vCoord（01,11,00,10） 与矩阵相乘
         vMatrix = GLES20.glGetUniformLocation(program, "vMatrix");
-        // 构造 的时候 给 数据  vPosition gpu 是1  不是 2
     }
     public void setSize(int width, int height) {
         mWidth = width;

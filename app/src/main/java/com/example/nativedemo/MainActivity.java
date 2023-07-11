@@ -1,16 +1,15 @@
 package com.example.nativedemo;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.example.nativedemo.databinding.ActivityMainBinding;
+import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Build;
+import com.example.nativedemo.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -98,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         // 将glSurfaceView与ui的绑定
         glSurfaceView = (GLSurfaceView)findViewById(R.id.glsurfaceview);
-
         // 设置GLContext的版本
         glSurfaceView.setEGLContextClientVersion(2);
         // 设置Render

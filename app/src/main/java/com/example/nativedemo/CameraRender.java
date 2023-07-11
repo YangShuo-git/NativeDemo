@@ -14,8 +14,8 @@ public class CameraRender implements GLSurfaceView.Renderer, Preview.OnPreviewOu
     private static final String TAG = "CameraRender";
     private CameraHelper cameraHelper;
     private CameraView cameraView;
-    private SurfaceTexture mCameraTexure;
     private ScreenFilter screenFilter;
+    private SurfaceTexture mCameraTexure;
     private  int[] textures;
     float[] mtx = new float[16];
     public CameraRender(CameraView cameraView) {
@@ -28,10 +28,9 @@ public class CameraRender implements GLSurfaceView.Renderer, Preview.OnPreviewOu
     // 监听画布创建完成
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
         // 准备好摄像头绘制的画布; 通过gl创建一个纹理id
         textures = new int[1];
-        // 让 SurfaceTexture 与 Gpu（OpenGL）共享一个数据源  0-31
+        // 让 SurfaceTexture 与 Gpu（OpenGL）共享一个数据源  0-31  让摄像头的数据和Opengl的数据进行共享
         mCameraTexure.attachToGLContext(textures[0]);
         // 监听摄像头数据回调
         mCameraTexure.setOnFrameAvailableListener(this);
