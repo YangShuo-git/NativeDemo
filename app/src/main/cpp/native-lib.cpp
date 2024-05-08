@@ -20,7 +20,8 @@ Java_com_example_nativedemo_MainActivity_stringFromJNI(JNIEnv* env, jobject /* t
     test.getTest();
     // 如果是 native-lib.c，env是二级指针，则需要 （env*）->NewStringUTF()
     // 如果是 native-lib.cpp，env是一级指针，则直接 env->NewStringUTF()
-    // 因为cpp的JNIEnv就是原始的结构体，这里只有一个指针；而c的JNIEnv就已经是一级指针了
+    // 因为在cpp和c文件中，env是不一样的
+    // cpp的JNIEnv就是原始的结构体，这里只有一个指针；而c的JNIEnv就已经是一级指针了
     // c是没有对象的，想持有env环境，就必须将env传递进去：(env*)->NewStringUTF(env, "test")
     // 而cpp只需要：env->NewStringUTF("test")
 

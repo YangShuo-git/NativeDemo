@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
     private GLSurfaceView glSurfaceView;
 
-
     // 1. 加载so库.
     static {
         System.loadLibrary("nativedemo");

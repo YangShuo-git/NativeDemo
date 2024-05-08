@@ -35,7 +35,7 @@ public class TriangleRender implements GLSurfaceView.Renderer {
             0.5f, -0.5f, 0.0f   // bottom right
     };
     //设置颜色，依次为红绿蓝和透明通道
-    float color[] = { 1.0f, 0f, 0f, 1.0f };
+    float color[] = { 0.5f, 1.0f, 0.5f, 0.0f };
 
     public int loadShader(int type, String shaderCode){
         //根据type创建顶点着色器或者片元着色器
